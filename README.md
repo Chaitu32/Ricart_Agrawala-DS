@@ -1,2 +1,2 @@
-# Ricart_Agrawala-DS-
+# Ricart_Agrawala DS
 Implementing Ricart Agrawala in Python
