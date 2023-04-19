@@ -42,6 +42,7 @@ Critial_Section_Time = 0
 def UpdateLocalTime():
     global Local_time
     Local_time += 1
+    print("Local Time: %s" % Local_time)
 
 def RequestHandler(data):
     global Local_time
