@@ -45,6 +45,7 @@ def UpdateLocalTime():
     global Local_time
     Local_time += 1
 
+
 def RequestHandler(data, connection):
     print("Request Handler")
     print(data)
@@ -56,11 +57,13 @@ def RequestHandler(data, connection):
 
     if Timestamp > Local_time:
         Local_time = Timestamp
-        RequestQueue.append((Timestamp,NodeId))
+        RequestQueue.append((Timestamp, NodeId))
 
     else:
         # Send reply to the node
-        connection.sendall("REPLY %s %s" % (node_id, Local_time+1).encode('utf-8'))
+        connection.sendall("REPLY %s %s" %
+                           (node_id, Local_time+1).encode('utf-8'))
+
 
 def ReplyHandler(data, connection):
     print("Reply Handler")
@@ -71,7 +74,7 @@ def ReplyHandler(data, connection):
     NodeId = int(data[1])
     Timestamp = int(data[2])
 
-    if Critial_Section==True:
+    if Critial_Section == True:
         if Critial_Section_Time < Timestamp:
             Critial_Section_Reqlist[NodeId-1] = True
 
@@ -92,14 +95,13 @@ def AddNodeHandler(data, connection):
         # Send request to the new node
         NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         NodeSock.connect(('localhost', NodePort))
-        NodeSock.sendall("REQUEST %s %s" % (node_id, Local_time).encode('utf-8'))
+        NodeSock.sendall("REQUEST %s %s" %
+                         (node_id, Local_time).encode('utf-8'))
         NodeSock.close()
 
         # Add the node to the request queue
         Critial_Section_Reqlist[NodeId-1] = False
 
-
-    
 
 def CriticalSectionHandler(data, connection):
     print("Critical Section Handler")
@@ -115,13 +117,15 @@ def CriticalSectionHandler(data, connection):
                 NodePort = ports[i]
                 NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 NodeSock.connect(('localhost', NodePort))
-                NodeSock.sendall("REQUEST %s %s" % (node_id, Local_time).encode('utf-8'))
+                NodeSock.sendall("REQUEST %s %s" %
+                                 (node_id, Local_time).encode('utf-8'))
                 NodeSock.close()
 
                 Critial_Section_Reqlist[i-1] = False
 
     # Send reply to the master node
-    connection.sendall("REQUESTS_SENT %s %s" % (node_id, Local_time+1).encode('utf-8'))
+    connection.sendall("REQUESTS_SENT %s %s" %
+                       (node_id, Local_time+1).encode('utf-8'))
 
 
 def MsgHandler(data, connection):
@@ -145,9 +149,9 @@ def MsgHandler(data, connection):
     elif data[0] == "DELETE_NODE" and data[1] == "0":
         print("SHUTDOWN")
         return "SHUTDOWN"
-    
+
     return "OK"
-        
+
 
 while True:
 
@@ -158,7 +162,7 @@ while True:
             if Critial_Section_Reqlist[i] == False:
                 Check_reply = False
                 break
-        
+
         if Check_reply == True:
             # Critical Section
             print("Critical Section")
@@ -166,7 +170,8 @@ while True:
             # Send message to the master node
             MasterSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             MasterSock.connect(('localhost', ports[0]))
-            MasterSock.sendall("CRITICAL_SECTION_DONE %s %s" % (node_id, Local_time).encode('utf-8'))
+            MasterSock.sendall("CRITICAL_SECTION_DONE %s %s" %
+                               (node_id, Local_time).encode('utf-8'))
             MasterSock.close()
 
             # Reset the variables
@@ -174,7 +179,6 @@ while True:
             Critial_Section_Reqlist = {}
             Critial_Section_Time = 0
 
-    
     # Check for Request Queue
     if Critial_Section == False and len(RequestQueue) > 0:
         # Get the first request
@@ -184,7 +188,8 @@ while True:
         NodePort = ports[Request[1]]
         NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         NodeSock.connect(('localhost', NodePort))
-        NodeSock.sendall("REPLY %s %s" % (node_id, Local_time+1).encode('utf-8'))
+        NodeSock.sendall("REPLY %s %s" %
+                         (node_id, Local_time+1).encode('utf-8'))
         NodeSock.close()
 
     elif Critial_Section == True and len(RequestQueue) > 0:
@@ -196,9 +201,9 @@ while True:
             NodePort = ports[Request[1]]
             NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             NodeSock.connect(('localhost', NodePort))
-            NodeSock.sendall("REPLY %s %s" % (node_id, Local_time+1).encode('utf-8'))
+            NodeSock.sendall("REPLY %s %s" %
+                             (node_id, Local_time+1).encode('utf-8'))
             NodeSock.close()
-
 
     # Wait for a connection
     connection, client_address = sock.accept()
@@ -222,7 +227,7 @@ while True:
 
         # Update local time
         UpdateLocalTime()
-        
+
 
 # Close the socket
 sock.close()

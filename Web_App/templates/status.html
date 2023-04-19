@@ -22,25 +22,25 @@
         <h2>Add Node</h1>
 	<form method="POST" action="/">
 		<label for="node">Node:</label>
-		<input type="text" id="node" name="node">
+		<input type="number"  min = "1" id="node" name="node">
 		<button type="submit">Add</button>
 	</form>
 		<h2>Add Node to Critical Section</h2>
 		<form method="post" action="/add_critical">
 			<label for="node">Node Name:</label>
-			<input type="text" id="node" name="node">
+			<input type="number"  min = "1"  id="node" name="node">
 			<input type="submit" value="Add Node to Critical Section">
 		</form>
 		<h2>Remove Node from Critical Section</h2>
 		<form method="post" action="/remove_critical">
 			<label for="node">Node Name:</label>
-			<input type="text" id="node" name="node">
+			<input type="number"  min = "1"  id="node" name="node">
 			<input type="submit" value="Remove Node from Critical Section">
 		</form>
 		<h2>Remove Node from System</h2>
 		<form method="post" action="/remove_node">
 			<label for="node">Node Name:</label>
-			<input type="text" id="node" name="node">
+			<input type="number" min = "1"  id="node" name="node">
 			<input type="submit" value="Remove Node from System">
 		</form>
 	</body>

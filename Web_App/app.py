@@ -1,10 +1,15 @@
 # app.py
 from flask import Flask, request, render_template
+import socket
+import sys
 
 app = Flask(__name__)
 
 nodes = []  # list of all nodes in the distributed system
 critical_nodes = []  # list of nodes currently in the critical section
+
+# Declaring Main socket to create Master Node
+sock = socket.socket()
 
 
 @app.route('/', methods=['GET', 'POST'])
