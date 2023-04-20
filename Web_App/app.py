@@ -2,6 +2,7 @@
 from flask import Flask, request, render_template
 import socket
 import sys
+import threading
 
 app = Flask(__name__)
 
@@ -9,7 +10,16 @@ nodes = []  # list of all nodes in the distributed system
 critical_nodes = []  # list of nodes currently in the critical section
 
 # Declaring Main socket to create Master Node
-sock = socket.socket()
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_address = ('localhost', 8080)
+print(f"Starting up on {server_address[0]} port {server_address[1]}")
+sock.bind(server_address)
+
+# Create a thread to listen for incoming connections
+
+
+def Create_Node(node_Id):
+    pass
 
 
 @app.route('/', methods=['GET', 'POST'])
