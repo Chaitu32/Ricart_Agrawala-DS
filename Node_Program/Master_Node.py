@@ -6,7 +6,7 @@ server_address = ('localhost', 8080)
 print('starting up on %s port %s' % server_address)
 sock.bind(server_address)
 sock.listen(1)
-
+print("executing master")
 while True:
     print('waiting for a connection')
     connection, client_address = sock.accept()
@@ -16,4 +16,3 @@ while True:
         print('received "%s"' % data)
     finally:
         connection.close()
-

@@ -1,25 +1,51 @@
 # app.py
+from ast import Delete
 from flask import Flask, request, render_template
 import socket
 import sys
 import threading
-
+import subprocess
 app = Flask(__name__)
 
 nodes = []  # list of all nodes in the distributed system
 critical_nodes = []  # list of nodes currently in the critical section
+node_ports = {}
 
 # Declaring Main socket to create Master Node
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('localhost', 8080)
-print(f"Starting up on {server_address[0]} port {server_address[1]}")
-sock.bind(server_address)
+# sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# server_address = ('localhost', 8080)
+# print(f"Starting up on {server_address[0]} port {server_address[1]}")
+# sock.bind(server_address)
+
+
+def execute_file(file_path):
+    subprocess.call(['python3', file_path])
+
 
 # Create a thread to listen for incoming connections
+file_path = '../Node_Program/Master_Node.py'
+t = threading.Thread(target=execute_file, args=(file_path,))
+t.start()
 
 
-def Create_Node(node_Id):
-    pass
+def Create_Node(node_id, node_port, total_nodes):
+    file_path = '../Node_Program/Node.py'
+    file_path = file_path + " " + \
+        str(node_id) + " " + str(node_port) + " " + str(total_nodes)
+    t = threading.Thread(target=execute_file, args=(file_path))
+    t.start()
+    return
+
+
+def Delete_Node(node_id):
+    # Create sock for DELETE msg
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(('localhost', node_ports[node_id]))
+    sock.sendall("DELETE_NODE 0".encode('utf-8'))
+    sock.close()
+    del node_ports[node_id]
+
+    return True
 
 
 @app.route('/', methods=['GET', 'POST'])
