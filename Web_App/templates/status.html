@@ -27,8 +27,14 @@
 	</form>
 		<h2>Add Node to Critical Section</h2>
 		<form method="post" action="/add_critical">
-			<label for="node">Node Name:</label>
-			<input type="number"  min = "1"  id="node" name="node">
+			<input type="number" id="num_count" name="num_count" min="1" value="{{ num_count }}">
+			<br><br>
+			{% for i in range(num_count) %}
+				<label for="num_{{ i }}">Node Name {{ i + 1 }}:</label>
+				<input type="number"  min = "1"  id="node" name="node">
+				<br><br>
+			{% endfor %}
+			
 			<input type="submit" value="Add Node to Critical Section">
 		</form>
 		<h2>Remove Node from Critical Section</h2>

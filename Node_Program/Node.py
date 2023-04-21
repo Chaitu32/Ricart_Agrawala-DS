@@ -15,8 +15,6 @@ node_port = arguments[2]
 # Ports Mapping
 ports = {
     0: 8080,
-    1: 8090,
-    2: 8091,
 }
 
 # Create a TCP/IP socket
