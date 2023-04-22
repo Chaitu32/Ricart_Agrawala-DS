@@ -12,7 +12,7 @@ critical_nodes = []  # list of nodes currently in the critical section
 node_ports = {}
 num_count = 1
 cur_port = 8091
-
+file_paths = ['file1.txt', 'file2.txt', 'file3.txt', 'file4.txt', 'file5.txt', 'fille6.txt']
 # Declaring Main socket to create Master Node
 # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # server_address = ('localhost', 8080)
@@ -166,6 +166,16 @@ def remove_node():
 @app.route('/status', methods=['GET'])
 def status():
     return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,)
+
+@app.route('/display_files')
+def display_files():
+    file_data = []
+    for file_path in file_paths:
+        file_name = os.path.basename(file_path)
+        with open(file_path, 'r') as f:
+            file_contents = f.read()
+        file_data.append({'file_name': file_name, 'file_contents': file_contents})
+    return render_template('display_files.html', file_data=file_data)
 
 
 if __name__ == '__main__':

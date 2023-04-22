@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Files</title>
+    <style>
+        .file-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .file-box {
+            max-width: 100%;
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 10px;
+            overflow: auto;
+        }
+        .file-name {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .file-contents {
+            white-space: pre-wrap;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            var fileBoxes = document.getElementsByClassName('file-box');
+            for (var i = 0; i < fileBoxes.length; i++) {
+                var fileContents = fileBoxes[i].getElementsByClassName('file-contents')[0];
+                var width = fileContents.offsetWidth;
+                fileBoxes[i].style.width = width + 'px';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="file-container">
+        {% for file in file_data %}
+            <div class="file-box">
+                <div class="file-name">{{ file.file_name }}</div>
+                <div class="file-contents">{{ file.file_contents }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
