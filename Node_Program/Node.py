@@ -287,5 +287,15 @@ while True:
 
 # Close the socket
 sock.close()
+print("Socket Closed Successfully")
 
+# Send message to the master node
+MasterSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+MasterSock.connect(('localhost', ports[0]))
+MasterSock.sendall(("Node %s is shutdown" % node_id).encode('utf-8'))
+MasterSock.close()
+
+print("Node %s is shutdown" % node_id)
+
+# Exit the program
 exit(0)

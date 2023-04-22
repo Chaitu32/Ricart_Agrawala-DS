@@ -1,2 +1,0 @@
-starting up on localhost port 8092
-Server Binded to port 8092

@@ -1,4 +1,6 @@
 Traceback (most recent call last):
-  File "/home/hp/dsporj/Ricart_Agrawala-DS/Web_App/../Node_Program/Master_Node.py", line 7, in <module>
-    sock.bind(server_address)
-OSError: [Errno 98] Address already in use
+  File "/mnt/sda1/Semester/ds/Ricart_Agrawala-DS/Web_App/../Node_Program/Master_Node.py", line 12, in <module>
+    connection, client_address = sock.accept()
+  File "/mnt/sda1/anaconda/lib/python3.10/socket.py", line 293, in accept
+    fd, addr = self._accept()
+KeyboardInterrupt
