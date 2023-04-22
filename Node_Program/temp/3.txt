@@ -1,0 +1,8 @@
+starting up on localhost port 8093
+Server Binded to port 8093
+Traceback (most recent call last):
+  File "/home/hp/dsporj/Ricart_Agrawala-DS/Web_App/../Node_Program/Node.py", line 264, in <module>
+    connection, client_address = sock.accept()
+  File "/usr/lib/python3.10/socket.py", line 293, in accept
+    fd, addr = self._accept()
+KeyboardInterrupt
