@@ -2,7 +2,7 @@
 from ast import Delete
 from flask import Flask, request, render_template
 import socket
-import sys
+import os,sys
 import threading
 import subprocess
 app = Flask(__name__)
@@ -12,7 +12,7 @@ critical_nodes = []  # list of nodes currently in the critical section
 node_ports = {}
 num_count = 1
 cur_port = 8091
-file_paths = ['file1.txt', 'file2.txt', 'file3.txt', 'file4.txt', 'file5.txt', 'fille6.txt']
+
 # Declaring Main socket to create Master Node
 # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # server_address = ('localhost', 8080)
@@ -170,6 +170,7 @@ def status():
 @app.route('/display_files')
 def display_files():
     file_data = []
+    file_paths = [os.path.join("../Node_Program/temp", file_name) for file_name in os.listdir("../Node_Program/temp")]
     for file_path in file_paths:
         file_name = os.path.basename(file_path)
         with open(file_path, 'r') as f:
