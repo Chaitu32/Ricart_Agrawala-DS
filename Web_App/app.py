@@ -5,6 +5,7 @@ import socket
 import sys
 import threading
 import subprocess
+from time import sleep
 app = Flask(__name__)
 
 nodes = []  # list of all nodes in the distributed system
@@ -56,9 +57,10 @@ def Delete_Node(node_id):
 def BroadCast_AddNode(node_id):
     global node_ports
     # Create a socket for ADD_NODE msg
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
     for i in node_ports:
         if i != node_id:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.connect(('localhost', node_ports[i]))
             sock.sendall(("ADD_NODE "+str(node_id)+" "+str(node_ports[node_id])).encode('utf-8'))
             sock.close()
@@ -92,12 +94,13 @@ def home():
         Create_Node(node, cur_port, len(nodes))
         cur_port+=1
         # Create a socket for sending Node info to new node
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sleep(2)
         for i in nodes:
             print(i, node)
             if i != node:
-                sock.connect(('localhost', node_ports[i]))
-                sock.sendall(("ADD_NODE "+str(node)+" "+str(node_ports[node])).encode('utf-8'))
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.connect(('localhost', node_ports[node]))
+                sock.sendall(("ADD_NODE "+str(i)+" "+str(node_ports[i])).encode('utf-8'))
                 sock.close()
         
         # Broadcast ADD_NODE to all nodes
