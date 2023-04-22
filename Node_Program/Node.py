@@ -2,6 +2,9 @@ import socket
 import sys
 import heapq
 
+
+sys.stdout = sys.stderr
+
 arguments = sys.argv
 
 if len(arguments) < 4:
@@ -18,15 +21,20 @@ ports = {
 }
 
 # Create a TCP/IP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+try:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Bind the socket to the port
-server_address = ('localhost', int(node_port))
-print('starting up on %s port %s' % server_address)
-sock.bind(server_address)
+    # Bind the socket to the port
+    server_address = ('localhost', int(node_port))
+    print('starting up on %s port %s' % server_address)
+    sock.bind(server_address)
+    print("Server Binded to port %s" % node_port)
 
 # Listen for incoming connections
-sock.listen(1)
+    sock.listen(10)
+except socket.error as e:
+    print(f'Failed to bind to {"fsfs"}:{node_port} - {e}')
+
 
 # Local Variables
 Total_Nodes = int(arguments[3])
@@ -124,8 +132,8 @@ def AddNodeHandler(data, connection):
     # Send reply to the master node
     MasterSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     MasterSock.connect(('localhost', ports[0]))
-    MasterSock.sendall(("NODE_ADDED %s %s" %
-                       (node_id, Local_time+1)).encode('utf-8'))
+    MasterSock.sendall(("NODE_ADDED %s %s %s" %
+                       (node_id, Local_time+1, NodeId)).encode('utf-8'))
     MasterSock.close()
 
 
