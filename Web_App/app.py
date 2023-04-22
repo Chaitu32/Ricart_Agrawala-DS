@@ -178,6 +178,5 @@ def display_files():
         file_data.append({'file_name': file_name, 'file_contents': file_contents})
     return render_template('display_files.html', file_data=file_data)
 
-
 if __name__ == '__main__':
     app.run(debug=True)
