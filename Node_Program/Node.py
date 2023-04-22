@@ -77,7 +77,7 @@ def RequestHandler(data):
         print("Sending reply to node %s" % NodeId)
 
 
-def ReplyHandler(data, connection):
+def ReplyHandler(data):
     global Local_time
     global Critial_Section
     global Critial_Section_Reqlist
@@ -94,7 +94,7 @@ def ReplyHandler(data, connection):
             Critial_Section_Reqlist[NodeId-1] = True
 
 
-def AddNodeHandler(data, connection):
+def AddNodeHandler(data):
     global Local_time
     global Critial_Section
     global Critial_Section_Reqlist
@@ -137,7 +137,7 @@ def AddNodeHandler(data, connection):
     MasterSock.close()
 
 
-def CriticalSectionHandler(data, connection):
+def CriticalSectionHandler(data):
     global Local_time
     global Critial_Section
     global Critial_Section_Reqlist
@@ -171,7 +171,7 @@ def CriticalSectionHandler(data, connection):
     MasterSock.close()
 
 
-def MsgHandler(data, connection):
+def MsgHandler(data):
     print("Message Handler")
     print(data)
     data = data.split(" ")
@@ -182,15 +182,15 @@ def MsgHandler(data, connection):
 
     elif data[0] == "REPLY":
         print("Reply Message")
-        ReplyHandler(' '.join(data), connection)
+        ReplyHandler(' '.join(data))
 
     elif data[0] == "ADD_NODE":
         print("Add Node Message")
-        AddNodeHandler(' '.join(data), connection)
+        AddNodeHandler(' '.join(data))
 
     elif data[0] == "CRITICAL_SECTION":
         print("Critical Section Message")
-        CriticalSectionHandler(' '.join(data), connection)
+        CriticalSectionHandler(' '.join(data))
 
     elif data[0] == "DELETE_NODE" and data[1] == "0":
         print("SHUTDOWN")
@@ -268,10 +268,10 @@ while True:
         # Receive the date from client
         data = connection.recv(1024)
         print('received "%s"' % data)
-
+        connection.close()
         # Analyze the data
         data = data.decode('utf-8')
-        Return = MsgHandler(data, connection)
+        Return = MsgHandler(data)
 
         if Return == "SHUTDOWN":
             break
@@ -279,7 +279,7 @@ while True:
     finally:
         print("Closing the connection")
         # Clean up the connection
-        connection.close()
+        # connection.close()
 
         # Update local time
         UpdateLocalTime()
