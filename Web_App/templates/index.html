@@ -141,7 +141,7 @@ header {
 					<h2>All Nodes</h2>
 					<ul>
 						{% for node in nodes %}
-							<li>{{ node }}{% if node in critical_nodes %} (in critical section){% endif %}</li>
+            <li>{{ node }} {% if node == critNode %}(in critical section) {% else %} {% if node in critical_nodes %}(waiting for critical section) {% else %} (Not interested in cs){% endif %} {% endif %}</li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -164,47 +164,54 @@ header {
             <input type="number" id="num_count" name="num_count" min="1" value="1">
             <br><br>
             <div id="node_inputs"></div>
+            <input type="submit" value="Submit">
 					</form>
+          
 				</div>
         <div class="nodes-1">
           <h2>System Status</h2>
             <p>{{ message }}</p>
         </div>
         <div class="critical-nodes adaptive-box">
-					<h2>Critical Nodes</h2>
-					<ul>
-						{% for node in critical_nodes %}
-							<li>{{ node }}{% if node in nodes %}{% if node in critical_nodes %} (in critical section){% endif %}{% else %} (not found in system){% endif %}</li>
-						{% endfor %}
-					</ul>
+					<h2>Refresh action</h2>
+          <form method="post" action="/status">
+            <input type="submit" value="Refresh">
+          </form>
 				</div>
 			</section>
 		</main>
     <script>
       const numCountInput = document.getElementById("num_count");
       const nodeInputsContainer = document.getElementById("node_inputs");
-      
+      const nodeInputsArray = [];
+    
       numCountInput.addEventListener("input", () => {
         const numNodes = numCountInput.value;
-        
+    
         nodeInputsContainer.innerHTML = "";
-        
+        nodeInputsArray.length = 0;
+    
         for (let i = 0; i < numNodes; i++) {
           const nodeLabel = document.createElement("label");
           nodeLabel.for = `node_${i}`;
           nodeLabel.textContent = `Node Name ${i + 1}:`;
-          
+    
           const nodeInput = document.createElement("input");
           nodeInput.type = "number";
           nodeInput.min = 1;
           nodeInput.id = `node_${i}`;
           nodeInput.name = `node_${i}`;
-          
+          nodeInput.addEventListener("input", () => {
+            nodeInputsArray[i] = nodeInput.value;
+          });
+    
+          nodeInputsArray.push(null);
           nodeInputsContainer.appendChild(nodeLabel);
           nodeInputsContainer.appendChild(nodeInput);
           nodeInputsContainer.appendChild(document.createElement("br"));
         }
       });
     </script>
+    
 	</body>
 </html>

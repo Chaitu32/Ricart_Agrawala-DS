@@ -1,7 +1,8 @@
 import socket
 import sys
 import heapq
-
+import requests
+from time import sleep
 
 sys.stdout = sys.stderr
 
@@ -62,9 +63,12 @@ def RequestHandler(data):
     NodeId = int(data[1])
     Timestamp = int(data[2])
 
-    if Timestamp > Local_time and Critial_Section == True:
+    if Timestamp >= Local_time:
         Local_time = Timestamp
+
+    if Timestamp >= Critial_Section_Time and Critial_Section == True:
         RequestQueue.append((Timestamp, NodeId))
+        print("Added %s to request_queue with %s" % (NodeId, Timestamp))
 
     else:
         # Send reply to the node
@@ -91,7 +95,7 @@ def ReplyHandler(data):
 
     if Critial_Section == True:
         if Critial_Section_Time < Timestamp:
-            Critial_Section_Reqlist[NodeId-1] = True
+            Critial_Section_Reqlist[NodeId] = True
 
 
 def AddNodeHandler(data):
@@ -120,13 +124,13 @@ def AddNodeHandler(data):
                              (node_id, Local_time)).encode('utf-8'))
             NodeSock.close()
             # Add the node to the request queue
-            Critial_Section_Reqlist[NodeId-1] = False
+            Critial_Section_Reqlist[NodeId] = False
         except ConnectionRefusedError:
             # Print error message
             print("Node %s is not available" % NodeId)
             print("Error Message: %s" % ConnectionRefusedError)
             # If the node is not available, remove it from the request queue
-            del Critial_Section_Reqlist[NodeId-1]
+            del Critial_Section_Reqlist[NodeId]
             del ports[NodeId]
 
     # Send reply to the master node
@@ -160,8 +164,9 @@ def CriticalSectionHandler(data):
                 NodeSock.sendall(("REQUEST %s %s" %
                                  (node_id, Local_time)).encode('utf-8'))
                 NodeSock.close()
+                print("Request sent to node %s" % i)
 
-                Critial_Section_Reqlist[i-1] = False
+                Critial_Section_Reqlist[i] = False
 
     # Send reply to the master node
     MasterSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -213,10 +218,17 @@ while True:
             # Critical Section
             print("Critical Section")
 
+            # Send Post request to Flask server
+            url = "http://localhost:5000/Critial_Node_Update"
+            res = requests.post(url, data={'node_id': node_id})
+
+            print("Web Server is updated by %s" % node_id)
+            sleep(20)
+
             # Send message to the master node
             MasterSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             MasterSock.connect(('localhost', ports[0]))
-            MasterSock.sendall(("CRITICAL_SECTION_DONE %s %s" %
+            MasterSock.sendall(("IN_CRITICAL_SECTION %s %s" %
                                (node_id, Local_time)).encode('utf-8'))
             MasterSock.close()
 
@@ -225,30 +237,17 @@ while True:
             Critial_Section_Reqlist = {}
             Critial_Section_Time = 0
 
-        # Update the local time
-        UpdateLocalTime()
+            # Update the local time
+            UpdateLocalTime()
+            print("Critical Section Done %s" % node_id)
 
     # Check for Request Queue
     if Critial_Section == False and len(RequestQueue) > 0:
         # Get the first request
-        Request = heapq.heappop(RequestQueue)
+        while len(RequestQueue) > 0:
+            heapq.heapify(RequestQueue)
+            Request = heapq.heappop(RequestQueue)
 
-        # Send reply to the node
-        NodePort = ports[Request[1]]
-        NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        NodeSock.connect(('localhost', NodePort))
-        NodeSock.sendall(
-            ("REPLY %s %s" % (node_id, Local_time+1)).encode('utf-8'))
-        NodeSock.close()
-
-        # Update the local time
-        UpdateLocalTime()
-
-    elif Critial_Section == True and len(RequestQueue) > 0:
-        # Get the first request
-        Request = heapq.heappop(RequestQueue)
-
-        if Request[0] < Critial_Section_Time:
             # Send reply to the node
             NodePort = ports[Request[1]]
             NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -259,6 +258,28 @@ while True:
 
             # Update the local time
             UpdateLocalTime()
+            print("Sent Reply to %s" % Request[1])
+
+    elif Critial_Section == True and len(RequestQueue) > 0:
+        # Get the first request
+        heapq.heapify(RequestQueue)
+        Request = heapq.heappop(RequestQueue)
+        print(Request)
+
+        if Request[0] == Critial_Section_Time and int(Request[1]) < int(node_id):
+            # Send reply to the node
+            NodePort = ports[Request[1]]
+            NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            NodeSock.connect(('localhost', NodePort))
+            NodeSock.sendall(
+                ("REPLY %s %s" % (node_id, Local_time+1)).encode('utf-8'))
+            NodeSock.close()
+
+            # Update the local time
+            UpdateLocalTime()
+            print("Sent Reply to %s" % Request[1])
+        else:
+            RequestQueue.append(Request)
 
     # Wait for a connection
     connection, client_address = sock.accept()

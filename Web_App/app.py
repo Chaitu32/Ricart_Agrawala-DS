@@ -1,11 +1,16 @@
 # app.py
 from ast import Delete
-from flask import Flask, request, render_template
+from email import message
+from platform import node
+from flask import Flask, request, render_template, redirect
 import socket
-import os,sys
+import os
+import sys
 import threading
 import subprocess
 from time import sleep
+
+
 app = Flask(__name__)
 
 nodes = []  # list of all nodes in the distributed system
@@ -14,6 +19,7 @@ node_ports = {}
 num_count = 1
 cur_port = 8091
 
+critNode = -1
 # Declaring Main socket to create Master Node
 # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # server_address = ('localhost', 8080)
@@ -87,11 +93,12 @@ def home():
     global cur_port
     global nodes
     global node_ports
+    global critNode
     if request.method == 'POST':
         num_count = request.args.get('num_count', default=1, type=int)
         node = request.form['node']
         if node in nodes:
-            return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+            return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
                                    message=f'{node} already exists in the system')
         nodes.append(node)
         node_ports[node] = cur_port
@@ -100,7 +107,7 @@ def home():
         Create_Node(node, cur_port, len(nodes))
         cur_port += 1
         # Create a socket for sending Node info to new node
-        sleep(2)
+        sleep(1)
         for i in nodes:
             print(i, node)
             if i != node:
@@ -112,11 +119,12 @@ def home():
 
         # Broadcast ADD_NODE to all nodes
         BroadCast_AddNode(node)
-        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
                                message=f'{node} added to the system')
     else:
         num_count = request.args.get('num_count', default=1, type=int)
-        return render_template('index.html')
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
+                               message=f'added to the system')
 
 
 def Init_Critial(node_id):
@@ -126,11 +134,6 @@ def Init_Critial(node_id):
     if node_id in nodes and node_id not in critical_nodes:
         critical_nodes.append(node_id)
         Critial_Section_Msg(node_id)
-        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
-                               message=f'{node_id} added to critical section')
-    else:
-        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
-                               message=f'{node_id} not found in the system or already in critical section')
 
 
 @app.route('/add_critical', methods=['POST'])
@@ -138,10 +141,19 @@ def add_critical():
     global critical_nodes
     global nodes
     global num_count
-    num_count = request.args.get('num_count', default=1, type=int)
 
-    nodes_list = request.form.getlist('num')
-    nodes_list = [int(i) for i in nodes_list]
+    num_nodes = int(request.form['num_count'])
+    array = [ request.form[f'node_{i}'] for i in range(num_nodes)]
+    print(array)
+    # array = [request.form[f'array-{i}'] for i in range(1, 11)]
+    nodes_list = []
+    for n in array:
+        if n in nodes and n not in nodes_list:
+            nodes_list.append(n)
+
+    num_count = len(nodes_list)
+
+    # nodes_list = [int(i) for i in nodes_list]
     print("me")
     print(num_count)
     print(nodes_list)
@@ -151,8 +163,11 @@ def add_critical():
         if node in nodes:
             t = threading.Thread(target=Init_Critial, args=(node,))
             t.start()
-            critical_nodes.append(node)
-    return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+            # critical_nodes.append(node)
+    print("me1")
+    print(critical_nodes)
+    print("me1")
+    return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
                            message=f'{nodes_list} added to critical section')
     # num_elements = int(request.form['num_elements'])
 
@@ -174,11 +189,13 @@ def remove_critical():
     node = request.form['node']
     if node in critical_nodes:
         critical_nodes.remove(node)
-        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
                                message=f'{node} removed from critical section')
     else:
-        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
                                message=f'{node} not found in critical section')
+
+
 def Remove_Node_MSG(node_id):
     global node_ports
     # Create a socket for CRITICAL_SECTION msg
@@ -201,25 +218,57 @@ def remove_node():
         return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                message=f'{node} removed from the system')
     else:
-        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
                                message=f'{node} not found in the system')
 
 
-@app.route('/status', methods=['GET'])
+@app.route('/Critial_Node_Update', methods=['POST'])
+def Update_Critial_Section():
+    global critNode
+    global critical_nodes
+    global nodes
+
+    node = request.form['node_id']
+    print("Critial Node %s" % node)
+    if node in critical_nodes:
+        critNode = node
+        critical_nodes.remove(node)
+
+        print("fsfsfsfsfsfsfsfsfs", critNode, critical_nodes)
+
+    return redirect("http://localhost:5000/status")
+
+
+@app.route('/status', methods=['GET', 'POST'])
 def status():
-    return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,)
+    global nodes
+    global critical_nodes
+    global critNode
+    global num_count
+    msg = 'Page refreshed.'
+    if critNode in nodes:
+        msg = str(critNode)+' is in Critical Section.'
+
+    print("critical_nodes %s" % critical_nodes)
+    print("Critical Node %s" % critNode)
+    return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
+                           message=msg)
+
 
 @app.route('/display_files')
 def display_files():
     file_data = []
-    file_paths = [os.path.join("../Node_Program/temp", file_name) for file_name in os.listdir("../Node_Program/temp")]
+    file_paths = [os.path.join("../Node_Program/temp", file_name)
+                  for file_name in os.listdir("../Node_Program/temp")]
     file_paths.sort(key=lambda x: os.path.basename(x))
     for file_path in file_paths:
         file_name = os.path.basename(file_path)
         with open(file_path, 'r') as f:
             file_contents = f.read()
-        file_data.append({'file_name': file_name, 'file_contents': file_contents})
+        file_data.append(
+            {'file_name': file_name, 'file_contents': file_contents})
     return render_template('display_files.html', file_data=file_data)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
