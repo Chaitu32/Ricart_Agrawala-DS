@@ -1,0 +1,36 @@
+starting up on localhost port 8092
+Server Binded to port 8092
+connection from ('127.0.0.1', 58908)
+received "b'ADD_NODE 1 8091'"
+Message Handler
+ADD_NODE 1 8091
+Add Node Message
+Add Node Handler
+ADD_NODE 1 8091
+Closing the connection
+Local Time: 1
+connection from ('127.0.0.1', 53440)
+received "b'ADD_NODE 22 8093'"
+Message Handler
+ADD_NODE 22 8093
+Add Node Message
+Add Node Handler
+ADD_NODE 22 8093
+Closing the connection
+Local Time: 2
+connection from ('127.0.0.1', 43052)
+received "b'REQUEST 1 2'"
+Message Handler
+REQUEST 1 2
+Request Message
+Request Handler
+REQUEST 1 2
+Sending reply to node 1
+Closing the connection
+Local Time: 3
+Traceback (most recent call last):
+  File "/mnt/sda1/Semester/ds/Ricart_Agrawala-DS/Web_App/../Node_Program/Node.py", line 304, in <module>
+    connection, client_address = sock.accept()
+  File "/mnt/sda1/anaconda/lib/python3.10/socket.py", line 293, in accept
+    fd, addr = self._accept()
+KeyboardInterrupt

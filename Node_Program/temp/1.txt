@@ -1,0 +1,62 @@
+starting up on localhost port 8091
+Server Binded to port 8091
+connection from ('127.0.0.1', 42626)
+received "b'ADD_NODE 2 8092'"
+Message Handler
+ADD_NODE 2 8092
+Add Node Message
+Add Node Handler
+ADD_NODE 2 8092
+Closing the connection
+Local Time: 1
+connection from ('127.0.0.1', 40112)
+received "b'ADD_NODE 22 8093'"
+Message Handler
+ADD_NODE 22 8093
+Add Node Message
+Add Node Handler
+ADD_NODE 22 8093
+Closing the connection
+Local Time: 2
+connection from ('127.0.0.1', 45070)
+received "b'CRITICAL_SECTION 0'"
+Message Handler
+CRITICAL_SECTION 0
+Critical Section Message
+Critical Section Handler
+CRITICAL_SECTION 0
+Sending request to node 2
+Request sent to node 2
+Sending request to node 22
+Request sent to node 22
+Closing the connection
+Local Time: 3
+connection from ('127.0.0.1', 45086)
+received "b'REPLY 2 3'"
+Message Handler
+REPLY 2 3
+Reply Message
+Reply Handler
+REPLY 2 3
+Closing the connection
+Local Time: 4
+connection from ('127.0.0.1', 45090)
+received "b'REPLY 22 3'"
+Message Handler
+REPLY 22 3
+Reply Message
+Reply Handler
+REPLY 22 3
+Closing the connection
+Local Time: 5
+Critical Section
+Web Server is updated by 1
+Web Server is updated by 1
+Local Time: 6
+Critical Section Done 1
+Traceback (most recent call last):
+  File "/mnt/sda1/Semester/ds/Ricart_Agrawala-DS/Web_App/../Node_Program/Node.py", line 304, in <module>
+    connection, client_address = sock.accept()
+  File "/mnt/sda1/anaconda/lib/python3.10/socket.py", line 293, in accept
+    fd, addr = self._accept()
+KeyboardInterrupt

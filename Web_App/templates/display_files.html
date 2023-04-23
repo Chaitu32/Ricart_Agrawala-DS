@@ -3,42 +3,50 @@
   <head>
     <title>Display Files</title>
     <style>
-      .file-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        overflow-x: auto;
-        padding: 20px;
-      }
+            .file-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 80%;
+}
 
-      /* Style the file container */
-      .file-box {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-shadow: 0 2px 2px #ccc;
-        padding: 20px;
-        margin-bottom: 20px;
-        overflow-x: auto;
-        flex: 1 1 calc(33% - 10px); /* Adjust the percentage value to your liking */
-        max-width: calc(33% - 10px); /* Adjust the percentage value to your liking */      
-      }
+.file-box {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 2px #ccc;
+  padding: 20px;
+  overflow-x: auto;
+  flex: 0 0 calc(33% - 20px);
+  max-width: calc(33% - 20px);
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
 
-      /* Style the file name */
-      .file-name {
-        font-weight: bold;
-        margin-bottom: 10px;
-        font-size: 18px;
-      }
+.file-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
 
-      /* Style the file contents */
-      .file-contents {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        max-width: 100%;
-        font-size: 16px;
-        overflow-y: auto; /* Add scroll inside box */
-        height: 200px; /* Adjust the height value to your liking */
-      }
+.file-contents {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 100%;
+  font-size: 16px;
+  overflow-y: auto; 
+  height: 200px; 
+}
+
+      header {
+        background-color: #333;
+        color: white;
+        padding: 2px;
+        text-align: center;
+        margin-bottom: 50px;
+      } 
     </style>
     <script>
       window.onload = function () {
@@ -58,6 +66,9 @@
   </head>
 
   <body>
+    <header>
+      <h1>Status of the Nodes</h1>
+    </header>
     <div class="file-container">
       {% for file in file_data %}
       <div class="file-box">
