@@ -1,0 +1,44 @@
+starting up on localhost port 8095
+Server Binded to port 8095
+connection from ('127.0.0.1', 44388)
+received "b'ADD_NODE 1 8091'"
+Message Handler
+ADD_NODE 1 8091
+Add Node Message
+Add Node Handler
+ADD_NODE 1 8091
+Closing the connection
+Local Time: 1
+connection from ('127.0.0.1', 44390)
+received "b'ADD_NODE 2 8092'"
+Message Handler
+ADD_NODE 2 8092
+Add Node Message
+Add Node Handler
+ADD_NODE 2 8092
+Closing the connection
+Local Time: 2
+connection from ('127.0.0.1', 44394)
+received "b'ADD_NODE 3 8093'"
+Message Handler
+ADD_NODE 3 8093
+Add Node Message
+Add Node Handler
+ADD_NODE 3 8093
+Closing the connection
+Local Time: 3
+connection from ('127.0.0.1', 44396)
+received "b'ADD_NODE 4 8094'"
+Message Handler
+ADD_NODE 4 8094
+Add Node Message
+Add Node Handler
+ADD_NODE 4 8094
+Closing the connection
+Local Time: 4
+Traceback (most recent call last):
+  File "/home/hp/dsporj/Ricart_Agrawala-DS/Web_App/../Node_Program/Node.py", line 264, in <module>
+    connection, client_address = sock.accept()
+  File "/usr/lib/python3.10/socket.py", line 293, in accept
+    fd, addr = self._accept()
+KeyboardInterrupt

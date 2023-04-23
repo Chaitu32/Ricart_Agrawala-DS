@@ -1,0 +1,245 @@
+starting up on localhost port 8094
+Server Binded to port 8094
+connection from ('127.0.0.1', 34430)
+received "b'ADD_NODE 1 8091'"
+Message Handler
+ADD_NODE 1 8091
+Add Node Message
+Add Node Handler
+ADD_NODE 1 8091
+Closing the connection
+Local Time: 1
+connection from ('127.0.0.1', 34432)
+received "b'ADD_NODE 2 8092'"
+Message Handler
+ADD_NODE 2 8092
+Add Node Message
+Add Node Handler
+ADD_NODE 2 8092
+Closing the connection
+Local Time: 2
+connection from ('127.0.0.1', 34434)
+received "b'ADD_NODE 3 8093'"
+Message Handler
+ADD_NODE 3 8093
+Add Node Message
+Add Node Handler
+ADD_NODE 3 8093
+Closing the connection
+Local Time: 3
+connection from ('127.0.0.1', 34472)
+received "b'REQUEST 2 3'"
+Message Handler
+REQUEST 2 3
+Request Message
+Request Handler
+REQUEST 2 3
+Sending reply to node 2
+Closing the connection
+Local Time: 4
+connection from ('127.0.0.1', 34490)
+received "b'REQUEST 1 4'"
+Message Handler
+REQUEST 1 4
+Request Message
+Request Handler
+REQUEST 1 4
+Sending reply to node 1
+Closing the connection
+Local Time: 5
+connection from ('127.0.0.1', 34570)
+received "b'REQUEST 1 9'"
+Message Handler
+REQUEST 1 9
+Request Message
+Request Handler
+REQUEST 1 9
+Sending reply to node 1
+Closing the connection
+Local Time: 10
+connection from ('127.0.0.1', 34568)
+received "b'REQUEST 2 10'"
+Message Handler
+REQUEST 2 10
+Request Message
+Request Handler
+REQUEST 2 10
+Sending reply to node 2
+Closing the connection
+Local Time: 11
+connection from ('127.0.0.1', 34588)
+received "b'REQUEST 3 5'"
+Message Handler
+REQUEST 3 5
+Request Message
+Request Handler
+REQUEST 3 5
+Sending reply to node 3
+Closing the connection
+Local Time: 12
+connection from ('127.0.0.1', 34632)
+received "b'REQUEST 1 17'"
+Message Handler
+REQUEST 1 17
+Request Message
+Request Handler
+REQUEST 1 17
+Sending reply to node 1
+Closing the connection
+Local Time: 18
+connection from ('127.0.0.1', 34646)
+received "b'REQUEST 2 17'"
+Message Handler
+REQUEST 2 17
+Request Message
+Request Handler
+REQUEST 2 17
+Sending reply to node 2
+Closing the connection
+Local Time: 19
+connection from ('127.0.0.1', 34654)
+received "b'REQUEST 3 19'"
+Message Handler
+REQUEST 3 19
+Request Message
+Request Handler
+REQUEST 3 19
+Sending reply to node 3
+Closing the connection
+Local Time: 20
+connection from ('127.0.0.1', 34700)
+received "b'REQUEST 2 26'"
+Message Handler
+REQUEST 2 26
+Request Message
+Request Handler
+REQUEST 2 26
+Sending reply to node 2
+Closing the connection
+Local Time: 27
+connection from ('127.0.0.1', 34702)
+received "b'REQUEST 1 26'"
+Message Handler
+REQUEST 1 26
+Request Message
+Request Handler
+REQUEST 1 26
+Sending reply to node 1
+Closing the connection
+Local Time: 28
+connection from ('127.0.0.1', 34724)
+received "b'REQUEST 3 28'"
+Message Handler
+REQUEST 3 28
+Request Message
+Request Handler
+REQUEST 3 28
+Sending reply to node 3
+Closing the connection
+Local Time: 29
+connection from ('127.0.0.1', 34766)
+received "b'REQUEST 2 35'"
+Message Handler
+REQUEST 2 35
+Request Message
+Request Handler
+REQUEST 2 35
+Sending reply to node 2
+Closing the connection
+Local Time: 36
+connection from ('127.0.0.1', 34778)
+received "b'REQUEST 1 34'"
+Message Handler
+REQUEST 1 34
+Request Message
+Request Handler
+REQUEST 1 34
+Sending reply to node 1
+Closing the connection
+Local Time: 37
+connection from ('127.0.0.1', 34790)
+received "b'REQUEST 3 33'"
+Message Handler
+REQUEST 3 33
+Request Message
+Request Handler
+REQUEST 3 33
+Sending reply to node 3
+Closing the connection
+Local Time: 38
+connection from ('127.0.0.1', 34834)
+received "b'REQUEST 2 42'"
+Message Handler
+REQUEST 2 42
+Request Message
+Request Handler
+REQUEST 2 42
+Sending reply to node 2
+Closing the connection
+Local Time: 43
+connection from ('127.0.0.1', 34840)
+received "b'REQUEST 1 42'"
+Message Handler
+REQUEST 1 42
+Request Message
+Request Handler
+REQUEST 1 42
+Sending reply to node 1
+Closing the connection
+Local Time: 44
+connection from ('127.0.0.1', 34854)
+received "b'REQUEST 3 43'"
+Message Handler
+REQUEST 3 43
+Request Message
+Request Handler
+REQUEST 3 43
+Sending reply to node 3
+Closing the connection
+Local Time: 45
+connection from ('127.0.0.1', 34898)
+received "b'REQUEST 2 51'"
+Message Handler
+REQUEST 2 51
+Request Message
+Request Handler
+REQUEST 2 51
+Sending reply to node 2
+Closing the connection
+Local Time: 52
+connection from ('127.0.0.1', 34908)
+received "b'REQUEST 1 52'"
+Message Handler
+REQUEST 1 52
+Request Message
+Request Handler
+REQUEST 1 52
+Sending reply to node 1
+Closing the connection
+Local Time: 53
+connection from ('127.0.0.1', 34920)
+received "b'REQUEST 3 50'"
+Message Handler
+REQUEST 3 50
+Request Message
+Request Handler
+REQUEST 3 50
+Sending reply to node 3
+Closing the connection
+Local Time: 54
+connection from ('127.0.0.1', 35098)
+received "b'REQUEST 1 58'"
+Message Handler
+REQUEST 1 58
+Request Message
+Request Handler
+REQUEST 1 58
+Sending reply to node 1
+Closing the connection
+Local Time: 59
+Traceback (most recent call last):
+  File "/home/hp/dsporj/Ricart_Agrawala-DS/Web_App/../Node_Program/Node.py", line 285, in <module>
+    connection, client_address = sock.accept()
+  File "/usr/lib/python3.10/socket.py", line 293, in accept
+    fd, addr = self._accept()
+KeyboardInterrupt
