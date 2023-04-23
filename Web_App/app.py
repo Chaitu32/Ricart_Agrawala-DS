@@ -91,7 +91,7 @@ def home():
         num_count = request.args.get('num_count', default=1, type=int)
         node = request.form['node']
         if node in nodes:
-            return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+            return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                    message=f'{node} already exists in the system')
         nodes.append(node)
         node_ports[node] = cur_port
@@ -112,7 +112,7 @@ def home():
 
         # Broadcast ADD_NODE to all nodes
         BroadCast_AddNode(node)
-        return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                message=f'{node} added to the system')
     else:
         num_count = request.args.get('num_count', default=1, type=int)
@@ -126,10 +126,10 @@ def Init_Critial(node_id):
     if node_id in nodes and node_id not in critical_nodes:
         critical_nodes.append(node_id)
         Critial_Section_Msg(node_id)
-        return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                message=f'{node_id} added to critical section')
     else:
-        return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                message=f'{node_id} not found in the system or already in critical section')
 
 
@@ -152,7 +152,7 @@ def add_critical():
             t = threading.Thread(target=Init_Critial, args=(node,))
             t.start()
             critical_nodes.append(node)
-    return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+    return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                            message=f'{nodes_list} added to critical section')
     # num_elements = int(request.form['num_elements'])
 
@@ -165,7 +165,7 @@ def add_critical():
     #     array.append(element)
 
     # # Return the array as a string
-    # return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+    # return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
     #                        message=f'{nodes_list} added to critical section')
 
 
@@ -174,10 +174,10 @@ def remove_critical():
     node = request.form['node']
     if node in critical_nodes:
         critical_nodes.remove(node)
-        return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                message=f'{node} removed from critical section')
     else:
-        return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                message=f'{node} not found in critical section')
 def Remove_Node_MSG(node_id):
     global node_ports
@@ -198,16 +198,16 @@ def remove_node():
         if node in critical_nodes:
             critical_nodes.remove(node)
         Remove_Node_MSG(node_id=node)
-        return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                message=f'{node} removed from the system')
     else:
-        return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
+        return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                message=f'{node} not found in the system')
 
 
 @app.route('/status', methods=['GET'])
 def status():
-    return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,)
+    return render_template('index.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,)
 
 @app.route('/display_files')
 def display_files():

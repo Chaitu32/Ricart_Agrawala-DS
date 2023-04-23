@@ -1,47 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Display Files</title>
     <style>
-        .file-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        .file-box {
-            max-width: 100%;
-            border: 1px solid black;
-            padding: 10px;
-            margin-bottom: 10px;
-            overflow: auto;
-        }
-        .file-name {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .file-contents {
-            white-space: pre-wrap;
-        }
+      .file-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        overflow-x: auto;
+        padding: 20px;
+      }
+
+      /* Style the file container */
+      .file-box {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 2px #ccc;
+        padding: 20px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        flex: 1 1 calc(33% - 10px); /* Adjust the percentage value to your liking */
+        max-width: calc(33% - 10px); /* Adjust the percentage value to your liking */      
+      }
+
+      /* Style the file name */
+      .file-name {
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+
+      /* Style the file contents */
+      .file-contents {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-width: 100%;
+        font-size: 16px;
+      }
     </style>
     <script>
-        window.onload = function() {
-            var fileBoxes = document.getElementsByClassName('file-box');
-            for (var i = 0; i < fileBoxes.length; i++) {
-                var fileContents = fileBoxes[i].getElementsByClassName('file-contents')[0];
-                var width = fileContents.offsetWidth;
-                fileBoxes[i].style.width = width + 'px';
-            }
-        }
+      window.onload = function () {
+        setFileBoxWidth();
+      };
     </script>
-</head>
-<body>
+    <script>
+      function setFileBoxWidth() {
+        var fileBoxes = document.getElementsByClassName("file-box");
+        for (var i = 0; i < fileBoxes.length; i++) {
+          var fileContents = fileBoxes[i].getElementsByClassName("file-contents")[0];
+          var width = fileContents.offsetWidth;
+          fileBoxes[i].style.width = width + "px";
+        }
+      }
+    </script>
+  </head>
+
+  <body>
     <div class="file-container">
-        {% for file in file_data %}
-            <div class="file-box">
-                <div class="file-name">{{ file.file_name }}</div>
-                <div class="file-contents">{{ file.file_contents }}</div>
-            </div>
-        {% endfor %}
+      {% for file in file_data %}
+      <div class="file-box">
+        <div class="file-name">{{ file.file_name }}</div>
+        <div class="file-contents">{{ file.file_contents }}</div>
+      </div>
+      {% endfor %}
     </div>
-</body>
+  </body>
 </html>

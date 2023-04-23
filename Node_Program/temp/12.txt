@@ -1,0 +1,11 @@
+starting up on localhost port 8092
+Server Binded to port 8092
+connection from ('127.0.0.1', 57954)
+received "b'ADD_NODE 11 8091'"
+Message Handler
+ADD_NODE 11 8091
+Add Node Message
+Add Node Handler
+ADD_NODE 11 8091
+Closing the connection
+Local Time: 1
