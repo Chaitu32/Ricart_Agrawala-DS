@@ -4,6 +4,7 @@ from email import message
 from platform import node
 from flask import Flask, request, render_template, redirect
 import socket
+import os
 import sys
 import threading
 import subprocess
@@ -36,7 +37,7 @@ def execute_file(file_path, node_id):
 
 # Create a thread to listen for incoming connections
 file_path = '../Node_Program/Master_Node.py'
-t = threading.Thread(target=execute_file, args=(file_path, 0))
+t = threading.Thread(target=execute_file, args=(file_path, 0,))
 t.start()
 
 
@@ -46,7 +47,7 @@ def Create_Node(node_id, node_port, total_nodes):
         total_nodes)
     # + " > " + "../Node_Program/temp/"+str(node_id)+".txt"
     print(file_path)
-    t = threading.Thread(target=execute_file, args=(file_path, node_id))
+    t = threading.Thread(target=execute_file, args=(file_path, node_id,))
     t.start()
     return
 
@@ -191,6 +192,17 @@ def remove_critical():
                                message=f'{node} not found in critical section')
 
 
+def Remove_Node_MSG(node_id):
+    global node_ports
+    # Create a socket for CRITICAL_SECTION msg
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(('localhost', node_ports[node_id]))
+    sock.sendall("DELETE_NODE 0".encode('utf-8'))
+    sock.close()
+
+    return True
+
+
 @app.route('/remove_node', methods=['POST'])
 def remove_node():
     node = request.form['node']
@@ -198,7 +210,8 @@ def remove_node():
         nodes.remove(node)
         if node in critical_nodes:
             critical_nodes.remove(node)
-        return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
+        Remove_Node_MSG(node_id=node)
+        return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count,
                                message=f'{node} removed from the system')
     else:
         return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
@@ -235,6 +248,21 @@ def status():
     print("Critical Node %s" % critNode)
     return render_template('status.html', nodes=nodes, critical_nodes=critical_nodes, num_count=num_count, critNode=critNode,
                            message=msg)
+
+
+@app.route('/display_files')
+def display_files():
+    file_data = []
+    file_paths = [os.path.join("../Node_Program/temp", file_name)
+                  for file_name in os.listdir("../Node_Program/temp")]
+    file_paths.sort(key=lambda x: os.path.basename(x))
+    for file_path in file_paths:
+        file_name = os.path.basename(file_path)
+        with open(file_path, 'r') as f:
+            file_contents = f.read()
+        file_data.append(
+            {'file_name': file_name, 'file_contents': file_contents})
+    return render_template('display_files.html', file_data=file_data)
 
 
 if __name__ == '__main__':
