@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Distributed System Status</title>
+	</head>
+	<body>
+		<h1>Distributed System Status</h1>
+		<p>{{ message }}</p>
+		<h2>All Nodes</h2>
+		<ul>
+			{% for node in nodes %}
+			<li>{{ node }} {% if node == critNode %}(in critical section) {% else %} {% if node in critical_nodes %}(waiting for critical section) {% else %} (Not interested in cs){% endif %} {% endif %}</li>
+			{% endfor %}
+		</ul>
+		<h2>Critical Nodes</h2>
+		<ul>
+			{% for node in critical_nodes %}
+			<li>{{ node }}{% if node in nodes %}{% if node in critical_nodes %} (in critical section){% endif %}{% else %} (not found in system){% endif %}</li>
+			{% endfor %}
+		</ul>
+        <h2>Add Node</h1>
+	<form method="POST" action="/">
+		<label for="node">Node:</label>
+		<input type="number"  min = "1" id="node" name="node">
+		<button type="submit">Add</button>
+	</form>
+		<h2>Add Node to Critical Section</h2>
+		<form method="post" action="/add_critical">
+			<label for="input-1">Array element 1:</label>
+      <input type="number" id="input-1" name="array-1" value="" required>
+      
+      <label for="input-2">Array element 2:</label>
+      <input type="number" id="input-2" name="array-2" value="" required>
+      
+      <label for="input-3">Array element 3:</label>
+      <input type="number" id="input-3" name="array-3" value="" required>
+      
+      <label for="input-4">Array element 4:</label>
+      <input type="number" id="input-4" name="array-4" value="" required>
+      
+      <label for="input-5">Array element 5:</label>
+      <input type="number" id="input-5" name="array-5" value="" required>
+	  <label for="input-6">Array element 6:</label>
+      <input type="number" id="input-6" name="array-6" value="" required>
+	  <label for="input-7">Array element 7:</label>
+      <input type="number" id="input-7" name="array-7" value="" required>
+	  <label for="input-8">Array element 8:</label>
+      <input type="number" id="input-8" name="array-8" value="" required>
+	  <label for="input-9">Array element 9:</label>
+      <input type="text" id="input-9" name="array-9" value="" required>
+	  <label for="input-10">Array element 10:</label>
+      <input type="number" id="input-10" name="array-10" value="" required>
+      
+      <input type="submit" value="Submit">
+      
+    
+		</form>
+		<h2>Remove Node from Critical Section</h2>
+		<form method="post" action="/remove_critical">
+			<label for="node">Node Name:</label>
+			<input type="number"  min = "1"  id="node" name="node">
+			<input type="submit" value="Remove Node from Critical Section">
+		</form>
+		<h2>Remove Node from System</h2>
+		<form method="post" action="/remove_node">
+			<label for="node">Node Name:</label>
+			<input type="number" min = "1"  id="node" name="node">
+			<input type="submit" value="Remove Node from System">
+		</form>
+		<h2>Refresh action</h2>
+		<form method="post" action="/status">
+			<input type="submit" value="Refresh">
+		</form>
+	</body>
+</html>

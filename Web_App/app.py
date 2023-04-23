@@ -236,6 +236,9 @@ def Update_Critial_Section():
 
         print("fsfsfsfsfsfsfsfsfs", critNode, critical_nodes)
 
+    elif int(node)==-1:
+        critNode = -1
+
     return redirect("http://localhost:5000/status")
 
 
@@ -246,7 +249,7 @@ def status():
     global critNode
     global num_count
     msg = 'Page refreshed.'
-    if critNode in nodes:
+    if str(critNode) in nodes:
         msg = str(critNode)+' is in Critical Section.'
 
     print("critical_nodes %s" % critical_nodes)

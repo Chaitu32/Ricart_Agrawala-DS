@@ -73,12 +73,18 @@ def RequestHandler(data):
     else:
         # Send reply to the node
         NodePort = ports[NodeId]
-        NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        NodeSock.connect(('localhost', NodePort))
-        NodeSock.sendall(
-            ("REPLY %s %s" % (node_id, Local_time+1)).encode('utf-8'))
-        NodeSock.close()
-        print("Sending reply to node %s" % NodeId)
+        try:
+            NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            NodeSock.connect(('localhost', NodePort))
+            NodeSock.sendall(
+                ("REPLY %s %s" % (node_id, Local_time+1)).encode('utf-8'))
+            NodeSock.close()
+            print("Sending reply to node %s" % NodeId)
+        except ConnectionRefusedError:
+            # Print error message
+            print("Node %s is not available" % NodeId)
+            print("Error Message: %s" % ConnectionRefusedError)
+            del ports[NodeId]
 
 
 def ReplyHandler(data):
@@ -155,18 +161,28 @@ def CriticalSectionHandler(data):
     if Critial_Section == False:
         Critial_Section = True
         Critial_Section_Time = Local_time
-        for i in ports:
+        Temp_ports = ports.copy()
+        for i in Temp_ports:
             if i != node_id and i != 0:
                 print("Sending request to node %s" % i)
                 NodePort = ports[i]
                 NodeSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                NodeSock.connect(('localhost', NodePort))
-                NodeSock.sendall(("REQUEST %s %s" %
-                                 (node_id, Local_time)).encode('utf-8'))
-                NodeSock.close()
-                print("Request sent to node %s" % i)
+                try:
+                    NodeSock.connect(('localhost', NodePort))
+                    NodeSock.sendall(("REQUEST %s %s" %
+                                    (node_id, Local_time)).encode('utf-8'))
+                    NodeSock.close()
+                    print("Request sent to node %s" % i)
 
-                Critial_Section_Reqlist[i] = False
+                    Critial_Section_Reqlist[i] = False
+                except ConnectionRefusedError:
+                    # Print error message
+                    print("Node %s is not available" % i)
+                    print("Error Message: %s" % ConnectionRefusedError)
+                    # If the node is not available, remove it from the request queue
+                    if i in Critial_Section_Reqlist:
+                        del Critial_Section_Reqlist[i]
+                    del ports[i]
 
     # Send reply to the master node
     MasterSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -210,7 +226,7 @@ while True:
     if Critial_Section == True:
         Check_reply = True
         for i in Critial_Section_Reqlist:
-            if Critial_Section_Reqlist[i] == False:
+            if Critial_Section_Reqlist[i] == False and  i in ports:
                 Check_reply = False
                 break
 
@@ -225,6 +241,9 @@ while True:
             print("Web Server is updated by %s" % node_id)
             sleep(20)
 
+            res = requests.post(url, data={'node_id': -1})
+            print("Web Server is updated by %s" % node_id)
+            sleep(1)
             # Send message to the master node
             MasterSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             MasterSock.connect(('localhost', ports[0]))
